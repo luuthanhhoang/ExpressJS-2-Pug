@@ -1,10 +1,15 @@
 var express = require('express');
 var app = express();
-var pug = require('pug');
 
 var port = 3000;
 
-//  var compliedFunction = pug.compileFile('include.pug');
+var users = [
+    { id: 1, name: 'Thinh' },
+    { id: 2, name: 'Luu' },
+    { id: 3, name: 'Tung' }
+]
+
+// var compliedFunction = pug.compileFile('include.pug');
 // console.log(compliedFunction({
 //     name: 'HTL'
 // }));
@@ -18,22 +23,28 @@ app.set('view engine', 'pug')
 
 app.set('views', './views')
 
-app.get('/', (req, res) =>{
+app.get('/', (req, res) => {
     res.render('index', {
         name: 'HTL',
         tuoi: '18'
     });
 })
 
-app.get('/users', (req, res) =>{
+app.get('/users', (req, res) => {
     res.render('users/index', {
-    	users: [
-            {id : 1, name: 'Thinh'},
-            {id : 2, name: 'Luu'},
-            {id : 3, name: 'Tung'}
-        ]
+        users: users
     })
 })
 
- app.listen(port, () => console.log('Server listening on port ' + port));
+app.get('/users/search', (req, res) => {
+    var q = req.query.q;
+    var querySearch = users.filter((item) => {
+        return item.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+    })
+    res.render('users/index', {
+        users: querySearch
+    })
+})
+
+app.listen(port, () => console.log('Server listening on port ' + port));
 
