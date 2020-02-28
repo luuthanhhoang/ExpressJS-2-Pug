@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+const bodyParser = require('body-parser')
+const multer = require('multer') // v1.0.5
 
 var port = 3000;
 
@@ -44,6 +46,18 @@ app.get('/users/search', (req, res) => {
     res.render('users/index', {
         users: querySearch
     })
+})
+
+app.get('/users/create', (req, res) =>{
+    res.render('users/create')
+})
+
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.post('/users/create', (req, res) => {
+    users.push(req.body);
+    res.redirect('/users')
 })
 
 app.listen(port, () => console.log('Server listening on port ' + port));
